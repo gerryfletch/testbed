@@ -1,5 +1,7 @@
 package dev.testbed;
 
+import dev.testbed.constructors.SelectionStrategy;
+import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import stub.DependencyX;
 import stub.DependencyY;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Integrated tests for TestBed integrating with stubbed dependencies and CUT, using the builder as it should be.
@@ -37,10 +40,40 @@ class TestBedTest {
 
     }
 
+    @Nested
+    class WithNoConstructorSelectionStrategy {
+
+        @Test
+        @DisplayName("no dependencies should be available")
+        void noDependenciesAvailable() {
+            TestBuilderStub testBuilderStub = new TestBuilderStub(SelectionStrategy.NONE);
+
+            assertThatThrownBy(() -> testBuilderStub.getDependency(DependencyX.class))
+                    .isInstanceOf(UnknownDependencyException.class);
+
+            assertThatThrownBy(() -> testBuilderStub.getDependency(DependencyY.class))
+                    .isInstanceOf(UnknownDependencyException.class);
+        }
+
+        @Test
+        @DisplayName("no dependencies can be set")
+        void noDependenciesCanBeSet() {
+            TestBuilderStub testBuilderStub = new TestBuilderStub(SelectionStrategy.NONE);
+
+            assertThatThrownBy(() -> testBuilderStub.setDependency(DependencyX.class, new DependencyX()))
+                    .isInstanceOf(UnknownDependencyException.class);
+        }
+
+    }
+
     class TestBuilderStub extends TestBed<ClassUnderTest, TestBuilderStub> {
 
         TestBuilderStub() {
             super(ClassUnderTest.class);
+        }
+
+        TestBuilderStub(SelectionStrategy selectionStrategy) {
+            super(ClassUnderTest.class, selectionStrategy);
         }
 
     }
