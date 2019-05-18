@@ -11,6 +11,7 @@ import stub.DependencyY;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.verify;
 
 /**
  * Integrated tests for TestBed integrating with stubbed dependencies and CUT, using the builder as it should be.
@@ -78,6 +79,34 @@ class TestBedTest {
 
             assertThatThrownBy(() -> testBuilderStub.setDependency(DependencyX.class, new DependencyX()))
                     .isInstanceOf(UnknownDependencyException.class);
+        }
+
+    }
+
+    @Nested
+    class Build {
+
+        @Test
+        @DisplayName("it should create the class under test")
+        void buildsCUT() {
+            TestBuilderStub testBuilderStub = new TestBuilderStub();
+
+            ClassUnderTest classUnderTest = testBuilderStub.build();
+
+            assertThat(classUnderTest).isNotNull();
+        }
+
+        @Test
+        @DisplayName("it should have mocked dependencies")
+        void mockedDependencies() {
+            TestBuilderStub testBuilderStub = new TestBuilderStub();
+
+            ClassUnderTest classUnderTest = testBuilderStub.build();
+            classUnderTest.triggerX();
+            classUnderTest.triggerY();
+
+            verify(testBuilderStub.getDependency(DependencyX.class)).action();
+            verify(testBuilderStub.getDependency(DependencyY.class)).action();
         }
 
     }
