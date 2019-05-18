@@ -20,6 +20,9 @@ public class TestBed<T, B> {
     private final Class<T> classUnderTest;
     private final Map<Class, Object> dependencyMap = new HashMap<>();
 
+    /**
+     * Creates a new TestBed for your Class Under Test.
+     */
     public TestBed(Class<T> classUnderTest) {
         this.classUnderTest = classUnderTest;
     }
