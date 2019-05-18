@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,13 @@ import java.util.stream.Collectors;
 public class Dependencies {
 
     private final Map<Class, Object> dependenciesMap;
+
+    /**
+     * Useful when there is no constructor selection strategy, this will instantiate an empty map of dependencies.
+     */
+    public Dependencies() {
+        this.dependenciesMap = new HashMap<>();
+    }
 
     /**
      * Stores constructor parameters as mocked objects.
