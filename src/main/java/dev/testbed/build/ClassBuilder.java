@@ -20,6 +20,27 @@ public class ClassBuilder<T> {
     }
 
     /**
+     * Instantiates a class under test with the arguments as specified, ignoring any preset dependencies or
+     * constructors found.
+     * @param arguments ordered array of objects to inject to the Class Under Test constructor.
+     * @return an instantiated Class Under Test.
+     * @throws TestBedException if the constructor does not exist, or the object instantiation fails.
+     */
+    public T buildClassUnderTest(Class<T> classUnderTest, Object... arguments) throws TestBedException {
+        Class[] parameters = new Class[arguments.length];
+
+        for (int i = 0; i < arguments.length; i++) {
+            parameters[i] = arguments[i].getClass();
+        }
+
+        try {
+            return classUnderTest.getConstructor(parameters).newInstance(arguments);
+        } catch (Exception e) {
+            throw new TestBedException(e);
+        }
+    }
+
+    /**
      * @return an instantiated Class Under Test, with dependencies injected into the constructor.
      * @throws TestBedException if the object instantiation fails.
      */
