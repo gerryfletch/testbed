@@ -1,5 +1,6 @@
 package dev.testbed.dependencies;
 
+import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
@@ -23,6 +24,10 @@ public class Dependencies {
     }
 
     public <C> C getDependency(Class<C> dependencyClass) {
+        if (! this.dependenciesMap.containsKey(dependencyClass)) {
+            throw new UnknownDependencyException(dependencyClass);
+        }
+
         return (C) this.dependenciesMap.get(dependencyClass);
     }
 
