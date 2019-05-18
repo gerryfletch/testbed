@@ -41,6 +41,22 @@ class TestBedTest {
     }
 
     @Nested
+    class SetDependency {
+
+        @Test
+        @DisplayName("it should store a set dependency")
+        void storesDependency() {
+            DependencyX dependencyX = new DependencyX();
+            TestBuilderStub builderStub = new TestBuilderStub().setDependency(DependencyX.class, dependencyX);
+
+            DependencyX storedDependency = builderStub.getDependency(DependencyX.class);
+
+            assertThat(storedDependency).isEqualTo(dependencyX);
+        }
+
+    }
+
+    @Nested
     class WithNoConstructorSelectionStrategy {
 
         @Test

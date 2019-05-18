@@ -17,7 +17,6 @@ import java.lang.reflect.Constructor;
  * @param <T> the Class Under Test.
  * @param <B> the implementing Builder.
  */
-@SuppressWarnings("unchecked")
 public class TestBed<T, B> {
 
     private final Class<T> classUnderTest;
@@ -64,7 +63,8 @@ public class TestBed<T, B> {
      * @param dependency the object to be injected into the Class Under Test constructor.
      * @throws UnknownDependencyException if a dependency is provided that is not in the Class Under Test constructor.
      */
-    public void setDependency(Class dependencyClass, Object dependency) {
+    public B setDependency(Class dependencyClass, Object dependency) {
         this.dependencies.setDependency(dependencyClass, dependency);
+        return (B) this;
     }
 }
