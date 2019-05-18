@@ -23,7 +23,13 @@ public class Dependencies {
                 .collect(Collectors.toMap(c -> c, Mockito::mock));
     }
 
-    public <C> C getDependency(Class<C> dependencyClass) {
+    /**
+     * @param dependencyClass the type of dependency to return.
+     * @param <C> the type instantiated dependency to return, inferred from the class.
+     * @return the instantiated dependency.
+     * @throws UnknownDependencyException if the dependency has not been created.
+     */
+    public <C> C getDependency(Class<C> dependencyClass) throws UnknownDependencyException {
         if (! this.dependenciesMap.containsKey(dependencyClass)) {
             throw new UnknownDependencyException(dependencyClass);
         }

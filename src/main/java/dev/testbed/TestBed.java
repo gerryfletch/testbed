@@ -2,6 +2,7 @@ package dev.testbed;
 
 import dev.testbed.constructors.ConstructorSelectionStrategy;
 import dev.testbed.constructors.SelectionStrategy;
+import dev.testbed.dependencies.Dependencies;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -24,8 +25,6 @@ public class TestBed<T, B> {
     private final Class<T> classUnderTest;
     private final Constructor<T> constructor;
 
-    private final Map<Class, Object> dependencyMap = new HashMap<>();
-
     /**
      * @param classUnderTest to create TestBed for.
      * @param constructorSelectionStrategy to use on the Class Under Test.
@@ -45,11 +44,7 @@ public class TestBed<T, B> {
         this(classUnderTest, SelectionStrategy.MAX_ARGUMENTS);
     }
 
-    /**
-     * @param dependencyClass to lookup.
-     * @return the instantiated dependency for the Class Under Test.
-     */
-    public <C> C getDependency(Class<C> dependencyClass) {
-        return (C) this.dependencyMap.get(dependencyClass);
+    public T build() {
+
     }
 }
