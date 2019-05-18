@@ -42,4 +42,17 @@ public class Dependencies {
         return (C) this.dependenciesMap.get(dependencyClass);
     }
 
+    /**
+     * @param classToMock the class to assign the dependency.
+     * @param dependency the object to be injected into the Class Under Test constructor.
+     * @throws UnknownDependencyException if a dependency is provided that is not in the Class Under Test constructor.
+     */
+    public void setDependency(Class classToMock, Object dependency) throws UnknownDependencyException {
+        if (! this.dependenciesMap.containsKey(classToMock)) {
+            throw new UnknownDependencyException(classToMock);
+        }
+
+        this.dependenciesMap.put(classToMock, dependency);
+    }
+
 }

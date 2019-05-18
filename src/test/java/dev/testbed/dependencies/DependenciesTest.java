@@ -74,6 +74,38 @@ class DependenciesTest {
 
     }
 
+    @Nested
+    class SetDependency {
+
+        Dependencies dependencies;
+
+        @BeforeEach
+        void setup() {
+            Constructor classStubConstructor = ClassStub.class.getConstructors()[0];
+            dependencies = new Dependencies(classStubConstructor);
+        }
+
+        @Test
+        @DisplayName("it should replace an existing mocked dependency")
+        void replacingDependency() {
+            DependencyX newDependency = new DependencyX();
+
+            assertThat(dependencies.getDependency(DependencyX.class)).isNotEqualTo(newDependency);
+
+            dependencies.setDependency(DependencyX.class, newDependency);
+
+            assertThat(dependencies.getDependency(DependencyX.class)).isEqualTo(newDependency);
+        }
+
+        @Test
+        @DisplayName("it should throw an UnknownDependencyException if the new dependency is not in the constructor")
+        void setUnknownDependency() {
+            assertThatThrownBy(() -> dependencies.setDependency(String.class, ""))
+                    .isInstanceOf(UnknownDependencyException.class);
+        }
+
+    }
+
     class ClassStub {
         public ClassStub(DependencyX dependencyX, DependencyY dependencyY) {
         }
