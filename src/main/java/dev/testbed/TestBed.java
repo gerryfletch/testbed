@@ -1,5 +1,8 @@
 package dev.testbed;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * TestBed provides dependency management for unit testing, and a framework to write tests within.
  *
@@ -11,15 +14,17 @@ package dev.testbed;
  * @param <T> the Class Under Test.
  * @param <B> the implementing Builder.
  */
+@SuppressWarnings("unchecked")
 public class TestBed<T, B> {
 
     private final Class<T> classUnderTest;
+    private final Map<Class, Object> dependencyMap = new HashMap<>();
 
     public TestBed(Class<T> classUnderTest) {
         this.classUnderTest = classUnderTest;
     }
 
     public <C> C getDependency(Class<C> dependencyClass) {
-        return (C) "";
+        return (C) this.dependencyMap.get(dependencyClass);
     }
 }
