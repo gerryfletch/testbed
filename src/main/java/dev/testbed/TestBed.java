@@ -3,6 +3,7 @@ package dev.testbed;
 import dev.testbed.constructors.ConstructorSelectionStrategy;
 import dev.testbed.constructors.SelectionStrategy;
 import dev.testbed.dependencies.Dependencies;
+import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class TestBed<T, B> {
 
     private final Class<T> classUnderTest;
     private final Constructor<T> constructor;
+    private final Dependencies dependencies;
 
     /**
      * @param classUnderTest to create TestBed for.
@@ -33,6 +35,7 @@ public class TestBed<T, B> {
     public TestBed(Class<T> classUnderTest, ConstructorSelectionStrategy constructorSelectionStrategy) {
         this.classUnderTest = classUnderTest;
         this.constructor = constructorSelectionStrategy.getConstructor(classUnderTest);
+        this.dependencies = new Dependencies(constructor);
     }
 
     /**
@@ -44,7 +47,13 @@ public class TestBed<T, B> {
         this(classUnderTest, SelectionStrategy.MAX_ARGUMENTS);
     }
 
-    public T build() {
-
+    /**
+     * @param dependencyClass the type of dependency to return.
+     * @param <C> the type instantiated dependency to return, inferred from the class.
+     * @return the instantiated dependency.
+     * @throws UnknownDependencyException if the dependency has not been created.
+     */
+    public <C> C getDependency(Class<C> dependencyClass) throws UnknownDependencyException {
+        return this.dependencies.getDependency(dependencyClass);
     }
 }

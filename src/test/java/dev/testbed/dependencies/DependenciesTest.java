@@ -1,11 +1,11 @@
 package dev.testbed.dependencies;
 
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
+import dev.testbed.exceptions.TestBedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import stub.ClassUnderTest;
 import stub.DependencyX;
 import stub.DependencyY;
 
@@ -16,6 +16,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
 class DependenciesTest {
+
+    @Nested
+    class Construction {
+
+        @Test
+        @DisplayName("it should throw a TestBed exception if a dependency is unmockable")
+        void badDependency() {
+            // Mockito doesn't like Strings because they are a final class. If I have a dependency injected String,
+            // all hell will break loose!
+            assertThatThrownBy(() -> new Dependencies(BadDependencyStub.class.getConstructors()[0]))
+                    .isInstanceOf(TestBedException.class);
+        }
+
+    }
 
     @Nested
     class GetDependency {
@@ -60,12 +74,13 @@ class DependenciesTest {
 
     }
 
-}
-
-class ClassStub {
-
-    public ClassStub(DependencyX dependencyX, DependencyY dependencyY) {
-
+    class ClassStub {
+        public ClassStub(DependencyX dependencyX, DependencyY dependencyY) {
+        }
     }
 
+    class BadDependencyStub {
+        public BadDependencyStub(String x) {
+        }
+    }
 }
