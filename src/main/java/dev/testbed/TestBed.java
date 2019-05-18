@@ -1,8 +1,10 @@
 package dev.testbed;
 
+import dev.testbed.build.ClassBuilder;
 import dev.testbed.constructors.SelectionStrategy;
 import dev.testbed.dependencies.Dependencies;
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
+import dev.testbed.exceptions.TestBedException;
 
 import java.lang.reflect.Constructor;
 
@@ -66,5 +68,13 @@ public class TestBed<T, B> {
     public B setDependency(Class dependencyClass, Object dependency) {
         this.dependencies.setDependency(dependencyClass, dependency);
         return (B) this;
+    }
+
+    /**
+     * @return an instantiated Class Under Test.
+     * @throws TestBedException if the object instantiation fails.
+     */
+    public T build() throws TestBedException {
+        return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest();
     }
 }
