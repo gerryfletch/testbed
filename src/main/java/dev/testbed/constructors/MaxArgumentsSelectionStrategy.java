@@ -1,6 +1,10 @@
 package dev.testbed.constructors;
 
+import dev.testbed.constructors.exceptions.NoClassConstructorsException;
+
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class MaxArgumentsSelectionStrategy implements ConstructorSelectionStrategy {
 
@@ -10,7 +14,9 @@ public class MaxArgumentsSelectionStrategy implements ConstructorSelectionStrate
      */
     @Override
     public <T> Constructor<T> getConstructor(Class<T> classUnderTest) {
-        return null;
+        return (Constructor<T>) Arrays.stream(classUnderTest.getConstructors())
+                .max(Comparator.comparingInt(Constructor::getParameterCount))
+                .orElseThrow(() -> new NoClassConstructorsException(classUnderTest));
     }
 
 }
