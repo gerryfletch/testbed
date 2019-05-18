@@ -28,7 +28,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
-            <type>bundle</type>
             <scope>test</scope>
         </dependency>
 
