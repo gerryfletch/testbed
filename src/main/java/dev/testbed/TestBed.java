@@ -24,6 +24,10 @@ public class TestBed<T, B> {
         this.classUnderTest = classUnderTest;
     }
 
+    /**
+     * @param dependencyClass to lookup.
+     * @return the instantiated dependency for the Class Under Test.
+     */
     public <C> C getDependency(Class<C> dependencyClass) {
         return (C) this.dependencyMap.get(dependencyClass);
     }
