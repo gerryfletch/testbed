@@ -1,13 +1,10 @@
 package dev.testbed;
 
-import dev.testbed.constructors.ConstructorSelectionStrategy;
 import dev.testbed.constructors.SelectionStrategy;
 import dev.testbed.dependencies.Dependencies;
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * TestBed provides dependency management for unit testing, and a framework to write tests within.
@@ -29,13 +26,18 @@ public class TestBed<T, B> {
 
     /**
      * @param classUnderTest to create TestBed for.
-     * @param constructorSelectionStrategy to use on the Class Under Test.
+     * @param selectionStrategy to use on the Class Under Test.
      * @see SelectionStrategy for a list of strategies and their descriptions.
      */
-    public TestBed(Class<T> classUnderTest, ConstructorSelectionStrategy constructorSelectionStrategy) {
+    public TestBed(Class<T> classUnderTest, SelectionStrategy selectionStrategy) {
         this.classUnderTest = classUnderTest;
-        this.constructor = constructorSelectionStrategy.getConstructor(classUnderTest);
-        this.dependencies = new Dependencies(constructor);
+        this.constructor = selectionStrategy.getConstructor(classUnderTest);
+
+        if (selectionStrategy == SelectionStrategy.NONE) {
+            this.dependencies = new Dependencies();
+        } else {
+            this.dependencies = new Dependencies(constructor);
+        }
     }
 
     /**
@@ -55,5 +57,14 @@ public class TestBed<T, B> {
      */
     public <C> C getDependency(Class<C> dependencyClass) throws UnknownDependencyException {
         return this.dependencies.getDependency(dependencyClass);
+    }
+
+    /**
+     * @param dependencyClass the class to assign the dependency.
+     * @param dependency the object to be injected into the Class Under Test constructor.
+     * @throws UnknownDependencyException if a dependency is provided that is not in the Class Under Test constructor.
+     */
+    public void setDependency(Class dependencyClass, Object dependency) {
+        this.dependencies.setDependency(dependencyClass, dependency);
     }
 }
