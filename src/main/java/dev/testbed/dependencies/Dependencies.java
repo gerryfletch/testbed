@@ -1,6 +1,7 @@
 package dev.testbed.dependencies;
 
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
+import dev.testbed.exceptions.TestBedException;
 import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
@@ -19,8 +20,12 @@ public class Dependencies {
      * Stores constructor parameters as mocked objects.
      */
     public <T> Dependencies(Constructor<T> constructor) {
-        this.dependenciesMap = Arrays.stream(constructor.getParameterTypes())
-                .collect(Collectors.toMap(c -> c, Mockito::mock));
+        try {
+            this.dependenciesMap = Arrays.stream(constructor.getParameterTypes())
+                    .collect(Collectors.toMap(c -> c, Mockito::mock));
+        } catch (Exception e) {
+            throw new TestBedException(e);
+        }
     }
 
     /**
