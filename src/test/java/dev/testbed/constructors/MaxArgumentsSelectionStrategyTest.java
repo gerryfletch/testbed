@@ -6,16 +6,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import stub.DependencyX;
 import stub.DependencyY;
-import stub.classes.MaxArgumentsConstructorClass;
-import stub.classes.NoConstructorClass;
-import stub.classes.PrivateConstructorClass;
-import stub.classes.SimilarPublicAndPrivateConstructorsClass;
+import stub.classes.*;
 
 import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MaxArgumentsSelectionStrategyTest {
 
@@ -57,6 +53,13 @@ class MaxArgumentsSelectionStrategyTest {
     @DisplayName("it should throw a NoClassConstructorException if the class has a private constructor")
     void privateConstructorClass() {
         assertThatThrownBy(() -> strategy.getConstructor(PrivateConstructorClass.class))
+                .isInstanceOf(NoClassConstructorsException.class);
+    }
+
+    @Test
+    @DisplayName("it should throw a NoClassConstructorException if the class has a package private constructor")
+    void packagePrivateConstructorClass() {
+        assertThatThrownBy(() -> strategy.getConstructor(PackagePrivateConstructorClass.class))
                 .isInstanceOf(NoClassConstructorsException.class);
     }
 
