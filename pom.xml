@@ -18,6 +18,7 @@
 
         <mockito.version>2.27.0</mockito.version>
 
+        <maven.surefire.version>3.0.0-M1</maven.surefire.version>
         <assertj.version>3.12.2</assertj.version>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
     </properties>
@@ -44,5 +45,27 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <release>11</release>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- Required for Junit5 Test running -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
