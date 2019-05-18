@@ -1,6 +1,7 @@
 package dev.testbed.constructors;
 
 import dev.testbed.constructors.strategies.MaxArgumentsSelectionStrategy;
+import dev.testbed.constructors.strategies.NoSelectionStrategy;
 
 import java.lang.reflect.Constructor;
 import java.util.function.Supplier;
@@ -10,7 +11,8 @@ import java.util.function.Supplier;
  */
 public enum SelectionStrategy implements ConstructorSelectionStrategy {
 
-    MAX_ARGUMENTS(MaxArgumentsSelectionStrategy::new);
+    MAX_ARGUMENTS(MaxArgumentsSelectionStrategy::new),
+    NONE(NoSelectionStrategy::new);
 
     private final ConstructorSelectionStrategy selectionStrategy;
 
