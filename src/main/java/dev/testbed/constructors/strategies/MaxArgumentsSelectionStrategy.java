@@ -1,5 +1,6 @@
-package dev.testbed.constructors;
+package dev.testbed.constructors.strategies;
 
+import dev.testbed.constructors.ConstructorSelectionStrategy;
 import dev.testbed.constructors.exceptions.NoClassConstructorsException;
 
 import java.lang.reflect.Constructor;

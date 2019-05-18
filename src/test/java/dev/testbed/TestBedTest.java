@@ -66,12 +66,12 @@ class TestBedTest {
 
     }
 
-}
+    class TestBuilderStub extends TestBed<ClassUnderTest, TestBuilderStub> {
 
-class TestBuilderStub extends TestBed<ClassUnderTest, TestBuilderStub> {
+        TestBuilderStub() {
+            super(ClassUnderTest.class);
+        }
 
-    TestBuilderStub() {
-        super(ClassUnderTest.class);
     }
 
 }
