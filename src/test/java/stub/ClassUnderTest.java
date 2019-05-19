@@ -18,4 +18,12 @@ public class ClassUnderTest {
         this.dependencyY.action();
     }
 
+    public DependencyX getDependencyX() {
+        return this.dependencyX;
+    }
+
+    public DependencyY getDependencyY() {
+        return this.dependencyY;
+    }
+
 }
