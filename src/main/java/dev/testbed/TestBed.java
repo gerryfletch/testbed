@@ -78,8 +78,4 @@ public class TestBed<T, B> {
     public T build() throws TestBedException {
         return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest();
     }
-
-    public T build(Object... arguments) {
-        return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest(this.classUnderTest, arguments);
-    }
 }
