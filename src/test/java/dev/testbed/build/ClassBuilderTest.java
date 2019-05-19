@@ -1,7 +1,6 @@
 package dev.testbed.build;
 
 import dev.testbed.dependencies.Dependencies;
-import dev.testbed.exceptions.TestBedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,8 +12,8 @@ import stub.DependencyY;
 import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class ClassBuilderTest {
 
@@ -56,75 +55,6 @@ class ClassBuilderTest {
         @DisplayName("it should throw a TestBedException if the constructor fails to instantiate")
         void failToInstantiate() {
             // stub test as this cannot currently be tested.
-        }
-    }
-
-    @Nested
-    class BuildClassUnderTestWithArguments {
-
-        Constructor<ClassUnderTest> constructor;
-        Dependencies dependencies;
-        ClassBuilder<ClassUnderTest> classBuilder;
-
-        @BeforeEach
-        void setup() {
-            constructor = (Constructor<ClassUnderTest>) ClassUnderTest.class.getConstructors()[0];
-            dependencies = new Dependencies(constructor);
-            classBuilder = new ClassBuilder<>(constructor, dependencies);
-        }
-
-        @Test
-        @DisplayName("it should instantiate the CUT with correct mocked dependencies")
-        void buildsCUT() {
-            ClassUnderTest classUnderTest = classBuilder.buildClassUnderTest(
-                    ClassUnderTest.class,
-                    mock(DependencyX.class),
-                    mock(DependencyY.class)
-            );
-            classUnderTest.triggerX();
-            classUnderTest.triggerY();
-
-            verify(classUnderTest.getDependencyX()).action();
-            verify(classUnderTest.getDependencyY()).action();
-        }
-
-        @Test
-        @DisplayName("it should instantiate the CUT with correct dependencies")
-        void buildsCUTWithoutMocks() {
-            DependencyX dependencyX = new DependencyX();
-            DependencyY dependencyY = new DependencyY();
-
-            ClassUnderTest classUnderTest = classBuilder.buildClassUnderTest(
-                    ClassUnderTest.class,
-                    dependencyX,
-                    dependencyY
-            );
-
-            assertThat(dependencyX).isEqualTo(classUnderTest.getDependencyX());
-            assertThat(dependencyY).isEqualTo(classUnderTest.getDependencyY());
-        }
-
-        @Test
-        @DisplayName("it should store the arguments as dependencies")
-        void argumentsStoredAsDependencies() {
-            DependencyX dependencyX = new DependencyX();
-            DependencyY dependencyY = new DependencyY();
-
-            assertThat(dependencies.getDependency(DependencyX.class)).isNotEqualTo(dependencyX);
-            assertThat(dependencies.getDependency(DependencyY.class)).isNotEqualTo(dependencyY);
-
-            classBuilder.buildClassUnderTest(ClassUnderTest.class, dependencyX, dependencyY);
-
-            assertThat(dependencies.getDependency(DependencyX.class)).isEqualTo(dependencyX);
-            assertThat(dependencies.getDependency(DependencyY.class)).isEqualTo(dependencyY);
-        }
-
-        @Test
-        @DisplayName("it should throw an exception if incorrect constructor parameters are provided")
-        void invalidConstructor() {
-            // Missing DependencyY
-            assertThatThrownBy(() -> classBuilder.buildClassUnderTest(ClassUnderTest.class, new DependencyX()))
-                    .isInstanceOf(TestBedException.class);
         }
     }
 
