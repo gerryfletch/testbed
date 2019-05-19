@@ -26,7 +26,7 @@ public class TestBed<T, B> {
     private final Dependencies dependencies;
 
     /**
-     * @param classUnderTest to create TestBed for.
+     * @param classUnderTest    to create TestBed for.
      * @param selectionStrategy to use on the Class Under Test.
      * @see SelectionStrategy for a list of strategies and their descriptions.
      */
@@ -43,6 +43,7 @@ public class TestBed<T, B> {
 
     /**
      * Creates a new TestBed with a default constructor selection strategy of Max Arguments.
+     *
      * @param classUnderTest to create TestBed for.
      * @see SelectionStrategy for a list of strategies and their descriptions.
      */
@@ -52,7 +53,7 @@ public class TestBed<T, B> {
 
     /**
      * @param dependencyClass the type of dependency to return.
-     * @param <C> the type instantiated dependency to return, inferred from the class.
+     * @param <C>             the type instantiated dependency to return, inferred from the class.
      * @return the instantiated dependency.
      * @throws UnknownDependencyException if the dependency has not been created.
      */
@@ -62,7 +63,7 @@ public class TestBed<T, B> {
 
     /**
      * @param dependencyClass the class to assign the dependency.
-     * @param dependency the object to be injected into the Class Under Test constructor.
+     * @param dependency      the object to be injected into the Class Under Test constructor.
      * @throws UnknownDependencyException if a dependency is provided that is not in the Class Under Test constructor.
      */
     public B setDependency(Class dependencyClass, Object dependency) {
@@ -76,5 +77,9 @@ public class TestBed<T, B> {
      */
     public T build() throws TestBedException {
         return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest();
+    }
+
+    public T build(Object... arguments) {
+        return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest(this.classUnderTest, arguments);
     }
 }

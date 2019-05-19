@@ -111,6 +111,21 @@ class TestBedTest {
 
     }
 
+    @Nested
+    class BuildWithArguments {
+
+        @Test
+        @DisplayName("it should create the class under test")
+        void createsCUT() {
+            TestBuilderStub testBuilderStub = new TestBuilderStub();
+
+            ClassUnderTest classUnderTest = testBuilderStub.build(new DependencyX(), new DependencyY());
+
+            assertThat(classUnderTest).isNotNull();
+        }
+
+    }
+
     class TestBuilderStub extends TestBed<ClassUnderTest, TestBuilderStub> {
 
         TestBuilderStub() {
