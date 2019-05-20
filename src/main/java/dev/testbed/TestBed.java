@@ -23,23 +23,8 @@ public class TestBed<T, B> {
 
     private final Class<T> classUnderTest;
     private final Constructor<T> constructor;
-    private final Dependencies dependencies;
-
-    /**
-     * @param classUnderTest    to create TestBed for.
-     * @param selectionStrategy to use on the Class Under Test.
-     * @see SelectionStrategy for a list of strategies and their descriptions.
-     */
-    public TestBed(Class<T> classUnderTest, SelectionStrategy selectionStrategy) {
-        this.classUnderTest = classUnderTest;
-        this.constructor = selectionStrategy.getConstructor(classUnderTest);
-
-        if (selectionStrategy == SelectionStrategy.NONE) {
-            this.dependencies = new Dependencies();
-        } else {
-            this.dependencies = new Dependencies(constructor);
-        }
-    }
+    private final SelectionStrategy selectionStrategy;
+    private Dependencies dependencies;
 
     /**
      * Creates a new TestBed with a default constructor selection strategy of Max Arguments.
@@ -49,6 +34,26 @@ public class TestBed<T, B> {
      */
     public TestBed(Class<T> classUnderTest) {
         this(classUnderTest, SelectionStrategy.MAX_ARGUMENTS);
+    }
+
+    /**
+     * @param classUnderTest    to create TestBed for.
+     * @param selectionStrategy to use on the Class Under Test.
+     * @see SelectionStrategy for a list of strategies and their descriptions.
+     */
+    public TestBed(Class<T> classUnderTest, SelectionStrategy selectionStrategy) {
+        this.classUnderTest = classUnderTest;
+        this.constructor = selectionStrategy.getConstructor(classUnderTest);
+        this.selectionStrategy = selectionStrategy;
+        this.dependencies = this.createDependencies();
+    }
+
+    /**
+     * @return an instantiated Class Under Test.
+     * @throws TestBedException if the object instantiation fails.
+     */
+    public T build() throws TestBedException {
+        return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest();
     }
 
     /**
@@ -72,10 +77,22 @@ public class TestBed<T, B> {
     }
 
     /**
-     * @return an instantiated Class Under Test.
-     * @throws TestBedException if the object instantiation fails.
+     * Some test runners, like JUnit4, do not have a BeforeEach setup capability.
+     * It is important that TestBed is created for each test, so there is no dependency mock contamination.
+     * This is a helper method to erase the dependencies and recreate them.
+     *
+     * @return TestBed with fresh dependencies.
      */
-    public T build() throws TestBedException {
-        return new ClassBuilder<>(this.constructor, this.dependencies).buildClassUnderTest();
+    public B reset() {
+        this.dependencies = this.createDependencies();
+        return (B) this;
+    }
+
+    private Dependencies createDependencies() {
+        if (this.selectionStrategy == SelectionStrategy.NONE) {
+            return new Dependencies();
+        } else {
+            return new Dependencies(constructor);
+        }
     }
 }
