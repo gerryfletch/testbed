@@ -3,6 +3,7 @@ package dev.testbed.dependencies;
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 import dev.testbed.exceptions.TestBedException;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -66,6 +67,15 @@ public class Dependencies {
     }
 
     /**
+     * Mocks the provided classes and delegates whenNew logic.
+     *
+     * @param dependencyClass to mock.
+     */
+    public void setNewDependencies(Class... dependencyClass) {
+        Arrays.stream(dependencyClass).forEach(c -> this.setNewDependency(c, PowerMockito.mock(c)));
+    }
+
+    /**
      * @param dependencyClass the class to assign the dependency.
      * @param dependency      the object to be returned when the class is instantiated.
      * @throws TestBedException if PowerMock fails to find any arguments for the dependency class.
@@ -74,7 +84,7 @@ public class Dependencies {
         try {
             whenNew(dependencyClass).withAnyArguments().thenReturn(dependency);
         } catch (Exception e) {
-            throw new TestBedException(e);
+            throw new TestBedException("PowerMock failed to stub " + dependencyClass + " with any arguments.", e);
         }
 
         this.dependenciesMap.put(dependencyClass, dependency);
