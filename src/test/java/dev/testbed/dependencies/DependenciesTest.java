@@ -13,6 +13,7 @@ import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class DependenciesTest {
@@ -102,6 +103,53 @@ class DependenciesTest {
         void setUnknownDependency() {
             assertThatThrownBy(() -> dependencies.setDependency(String.class, ""))
                     .isInstanceOf(UnknownDependencyException.class);
+        }
+
+    }
+
+    @Nested
+    class SetNewDependency {
+
+        Dependencies dependencies;
+
+        @BeforeEach
+        void setup() {
+            Constructor classStubConstructor = ClassStub.class.getConstructors()[0];
+            dependencies = new Dependencies(classStubConstructor);
+        }
+
+        @Test
+        @DisplayName("it should overwrite any existing dependency")
+            // This shouldn't ever really happen, but if a dev does use both constructor dep and instantiating deps,
+            // this should overwrite it for simplicity.
+        void overwritesDependency() {
+            DependencyX dependencyX = mock(DependencyX.class);
+
+            DependencyX storedDependency = dependencies.getDependency(DependencyX.class);
+
+            assertThat(dependencyX).isNotEqualTo(storedDependency);
+
+            dependencies.setNewDependency(DependencyX.class, dependencyX);
+
+            DependencyX newStoredDependency = dependencies.getDependency(DependencyX.class);
+
+            assertThat(dependencyX).isEqualTo(newStoredDependency);
+        }
+
+        @Test
+        @DisplayName("it should store the dependency, available via getDependency")
+        void storesDependency() {
+            BadDependencyStub badDependencyStub = new BadDependencyStub("");
+
+            dependencies.setNewDependency(BadDependencyStub.class, badDependencyStub);
+
+            assertThat(dependencies.getDependency(BadDependencyStub.class)).isEqualTo(badDependencyStub);
+        }
+
+        @Test
+        @DisplayName("it should use PowerMock.whenNew to store the dependency")
+        void usesPowerMock() {
+
         }
 
     }
