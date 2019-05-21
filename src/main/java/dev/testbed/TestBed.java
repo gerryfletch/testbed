@@ -76,6 +76,34 @@ public class TestBed<T, B> {
         return (B) this;
     }
 
+    /**
+     * Utilises PowerMock#whenNew to provide dependency instantiation support with the dependency you provide.
+     * <p>
+     * Use this method if you create your dependencies in your Class Under Test.
+     *
+     * @param dependencyClass the class to assign the dependency.
+     * @param dependency      the object to be returned when the class is instantiated.
+     * @throws TestBedException if PowerMock fails to find any arguments for the dependency class.
+     * @see org.powermock.api.mockito.PowerMockito#whenNew(Class)
+     * @see TestBed#setNewDependencies(Class[]) if you want TestBed to handle mocking your dependency.
+     */
+    public B setNewDependency(Class dependencyClass, Object dependency) throws TestBedException {
+        this.dependencies.setNewDependency(dependencyClass, dependency);
+        return (B) this;
+    }
+
+    /**
+     * Mocks the provided class, then utilises PowerMock#whenNew to provide dependency instantiation support.
+     * Use this method if you want to mock a dependency that you instantiate in your Class Under Test.
+     *
+     * @param dependencyClasses the classes to mock, used when the classes are instantiated.
+     * @throws TestBedException if PowerMock fails to find any arguments for the dependency class.
+     */
+    public B setNewDependencies(Class... dependencyClasses) throws TestBedException {
+        this.dependencies.setNewDependencies(dependencyClasses);
+        return (B) this;
+    }
+
     private Dependencies createDependencies() {
         if (this.selectionStrategy == SelectionStrategy.NONE) {
             return new Dependencies();
