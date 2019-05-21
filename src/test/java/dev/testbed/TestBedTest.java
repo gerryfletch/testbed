@@ -111,24 +111,6 @@ class TestBedTest {
 
     }
 
-    @Nested
-    class Refresh {
-
-        @Test
-        @DisplayName("it should return a new copy of TestBed")
-        void returnsNewCopy() {
-            TestBuilderStub testBuilderStub = new TestBuilderStub();
-            DependencyX dependencyX = testBuilderStub.getDependency(DependencyX.class);
-
-            TestBuilderStub resetTestBuilderStub = testBuilderStub.reset();
-            DependencyX resetDependencyX = testBuilderStub.getDependency(DependencyX.class);
-
-            assertThat(dependencyX).isNotEqualTo(resetDependencyX);
-            assertThat(testBuilderStub).isEqualTo(resetTestBuilderStub);
-        }
-
-    }
-
     class TestBuilderStub extends TestBed<ClassUnderTest, TestBuilderStub> {
 
         TestBuilderStub() {

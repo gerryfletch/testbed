@@ -76,18 +76,6 @@ public class TestBed<T, B> {
         return (B) this;
     }
 
-    /**
-     * Some test runners, like JUnit4, do not have a BeforeEach setup capability.
-     * It is important that TestBed is created for each test, so there is no dependency mock contamination.
-     * This is a helper method to erase the dependencies and recreate them.
-     *
-     * @return TestBed with fresh dependencies.
-     */
-    public B reset() {
-        this.dependencies = this.createDependencies();
-        return (B) this;
-    }
-
     private Dependencies createDependencies() {
         if (this.selectionStrategy == SelectionStrategy.NONE) {
             return new Dependencies();
