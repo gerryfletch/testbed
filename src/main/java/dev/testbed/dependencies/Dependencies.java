@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.powermock.api.mockito.PowerMockito.whenNew;
+
 /**
  * Storage, retrieval, and encapsulation of the internal mocking of dependencies.
  */
@@ -38,12 +40,12 @@ public class Dependencies {
 
     /**
      * @param dependencyClass the type of dependency to return.
-     * @param <C> the type instantiated dependency to return, inferred from the class.
+     * @param <C>             the type instantiated dependency to return, inferred from the class.
      * @return the instantiated dependency.
      * @throws UnknownDependencyException if the dependency has not been created.
      */
     public <C> C getDependency(Class<C> dependencyClass) throws UnknownDependencyException {
-        if (! this.dependenciesMap.containsKey(dependencyClass)) {
+        if (!this.dependenciesMap.containsKey(dependencyClass)) {
             throw new UnknownDependencyException(dependencyClass);
         }
 
@@ -52,15 +54,29 @@ public class Dependencies {
 
     /**
      * @param dependencyClass the class to assign the dependency.
-     * @param dependency the object to be injected into the Class Under Test constructor.
+     * @param dependency      the object to be injected into the Class Under Test constructor.
      * @throws UnknownDependencyException if a dependency is provided that is not in the Class Under Test constructor.
      */
     public void setDependency(Class dependencyClass, Object dependency) throws UnknownDependencyException {
-        if (! this.dependenciesMap.containsKey(dependencyClass)) {
+        if (!this.dependenciesMap.containsKey(dependencyClass)) {
             throw new UnknownDependencyException(dependencyClass);
         }
 
         this.dependenciesMap.put(dependencyClass, dependency);
     }
 
+    /**
+     * @param dependencyClass the class to assign the dependency.
+     * @param dependency      the object to be returned when the class is instantiated.
+     * @throws TestBedException if PowerMock fails to find any arguments for the dependency class.
+     */
+    public void setNewDependency(Class dependencyClass, Object dependency) throws TestBedException {
+        try {
+            whenNew(dependencyClass).withAnyArguments().thenReturn(dependency);
+        } catch (Exception e) {
+            throw new TestBedException(e);
+        }
+
+        this.dependenciesMap.put(dependencyClass, dependency);
+    }
 }
