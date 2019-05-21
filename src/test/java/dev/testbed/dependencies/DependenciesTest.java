@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import stub.DependencyX;
 import stub.DependencyY;
+import stub.DependencyZ;
 
 import java.lang.reflect.Constructor;
 
@@ -108,6 +109,30 @@ class DependenciesTest {
     }
 
     @Nested
+    class SetNewDependencies {
+
+        Dependencies dependencies;
+
+        @BeforeEach
+        void setup() {
+            Constructor classStubConstructor = ClassStub.class.getConstructors()[0];
+            dependencies = new Dependencies(classStubConstructor);
+        }
+
+        @Test
+        @DisplayName("it should store a mocked version the dependencies")
+        void storesMocks() {
+            dependencies.setNewDependencies(DependencyZ.class);
+
+            DependencyZ dependencyZ = dependencies.getDependency(DependencyZ.class);
+
+            assertThat(dependencyZ.getClass().toGenericString()).containsIgnoringCase("MockitoMock");
+        }
+
+    }
+
+
+    @Nested
     class SetNewDependency {
 
         Dependencies dependencies;
@@ -149,13 +174,34 @@ class DependenciesTest {
         @Test
         @DisplayName("it should use PowerMock.whenNew to store the dependency")
         void usesPowerMock() {
-
+            // stub. not sure how to test this yet. TODO
         }
+
 
     }
 
     class ClassStub {
+        private final DependencyX dependencyX;
+        private final DependencyY dependencyY;
+        private final DependencyZ dependencyZ;
+
         public ClassStub(DependencyX dependencyX, DependencyY dependencyY) {
+            this.dependencyX = dependencyX;
+            this.dependencyY = dependencyY;
+
+            this.dependencyZ = new DependencyZ();
+        }
+
+        public DependencyX getDependencyX() {
+            return dependencyX;
+        }
+
+        public DependencyY getDependencyY() {
+            return dependencyY;
+        }
+
+        public DependencyZ getDependencyZ() {
+            return dependencyZ;
         }
     }
 
