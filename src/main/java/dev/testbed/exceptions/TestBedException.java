@@ -7,4 +7,8 @@ public class TestBedException extends RuntimeException {
     public TestBedException(Exception e) {
         super(e);
     }
+
+    public TestBedException(String message, Exception e) {
+        super(message, e);
+    }
 }
