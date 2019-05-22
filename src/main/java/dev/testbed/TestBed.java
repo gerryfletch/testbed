@@ -1,7 +1,7 @@
 package dev.testbed;
 
 import dev.testbed.build.ClassBuilder;
-import dev.testbed.constructors.SelectionStrategy;
+import dev.testbed.constructors.strategies.ArgumentSelectionStrategy;
 import dev.testbed.dependencies.Dependencies;
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 import dev.testbed.exceptions.TestBedException;
@@ -23,25 +23,25 @@ public class TestBed<T, B> {
 
     private final Class<T> classUnderTest;
     private final Constructor<T> constructor;
-    private final SelectionStrategy selectionStrategy;
+    private final ArgumentSelectionStrategy selectionStrategy;
     private Dependencies dependencies;
 
     /**
      * Creates a new TestBed with a default constructor selection strategy of Max Arguments.
      *
      * @param classUnderTest to create TestBed for.
-     * @see SelectionStrategy for a list of strategies and their descriptions.
+     * @see ArgumentSelectionStrategy for a list of strategies and their descriptions.
      */
     public TestBed(Class<T> classUnderTest) {
-        this(classUnderTest, SelectionStrategy.MAX_ARGUMENTS);
+        this(classUnderTest, ArgumentSelectionStrategy.MAX_ARGUMENTS);
     }
 
     /**
      * @param classUnderTest    to create TestBed for.
      * @param selectionStrategy to use on the Class Under Test.
-     * @see SelectionStrategy for a list of strategies and their descriptions.
+     * @see ArgumentSelectionStrategy for a list of strategies and their descriptions.
      */
-    public TestBed(Class<T> classUnderTest, SelectionStrategy selectionStrategy) {
+    public TestBed(Class<T> classUnderTest, ArgumentSelectionStrategy selectionStrategy) {
         this.classUnderTest = classUnderTest;
         this.constructor = selectionStrategy.getConstructor(classUnderTest);
         this.selectionStrategy = selectionStrategy;
@@ -105,7 +105,7 @@ public class TestBed<T, B> {
     }
 
     private Dependencies createDependencies() {
-        if (this.selectionStrategy == SelectionStrategy.NONE) {
+        if (this.selectionStrategy == ArgumentSelectionStrategy.NONE) {
             return new Dependencies();
         } else {
             return new Dependencies(constructor);

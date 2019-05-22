@@ -1,5 +1,6 @@
 package dev.testbed.constructors.strategies;
 
+import dev.testbed.constructors.strategies.arguments.NoSelectionStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import stub.ClassUnderTest;
@@ -8,7 +9,7 @@ import java.lang.reflect.Constructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class NoSelectionStrategyTest {
+class NoArgumentSelectionStrategyTest {
 
     @Test
     @DisplayName("it should return null")

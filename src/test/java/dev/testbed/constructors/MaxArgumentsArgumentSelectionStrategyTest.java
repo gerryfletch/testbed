@@ -1,6 +1,8 @@
 package dev.testbed.constructors;
 
 import dev.testbed.constructors.exceptions.NoClassConstructorsException;
+import dev.testbed.constructors.strategies.ArgumentSelectionStrategy;
+import dev.testbed.constructors.strategies.ConstructorSelectionStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +15,13 @@ import java.lang.reflect.Constructor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class MaxArgumentsSelectionStrategyTest {
+class MaxArgumentsArgumentSelectionStrategyTest {
 
     private ConstructorSelectionStrategy strategy;
 
     @BeforeEach
     void setup() {
-        this.strategy = SelectionStrategy.MAX_ARGUMENTS;
+        this.strategy = ArgumentSelectionStrategy.MAX_ARGUMENTS;
     }
 
     @Test

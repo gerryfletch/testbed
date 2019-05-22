@@ -1,6 +1,6 @@
-package dev.testbed.constructors.strategies;
+package dev.testbed.constructors.strategies.arguments;
 
-import dev.testbed.constructors.ConstructorSelectionStrategy;
+import dev.testbed.constructors.strategies.ConstructorSelectionStrategy;
 
 import java.lang.reflect.Constructor;
 

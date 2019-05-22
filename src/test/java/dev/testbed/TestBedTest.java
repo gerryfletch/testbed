@@ -1,6 +1,6 @@
 package dev.testbed;
 
-import dev.testbed.constructors.SelectionStrategy;
+import dev.testbed.constructors.strategies.ArgumentSelectionStrategy;
 import dev.testbed.dependencies.exceptions.UnknownDependencyException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,12 +58,12 @@ class TestBedTest {
     }
 
     @Nested
-    class WithNoConstructorSelectionStrategy {
+    class WithNoConstructorArgumentSelectionStrategy {
 
         @Test
         @DisplayName("no dependencies should be available")
         void noDependenciesAvailable() {
-            TestBuilderStub testBuilderStub = new TestBuilderStub(SelectionStrategy.NONE);
+            TestBuilderStub testBuilderStub = new TestBuilderStub(ArgumentSelectionStrategy.NONE);
 
             assertThatThrownBy(() -> testBuilderStub.getDependency(DependencyX.class))
                     .isInstanceOf(UnknownDependencyException.class);
@@ -75,7 +75,7 @@ class TestBedTest {
         @Test
         @DisplayName("no dependencies can be set")
         void noDependenciesCanBeSet() {
-            TestBuilderStub testBuilderStub = new TestBuilderStub(SelectionStrategy.NONE);
+            TestBuilderStub testBuilderStub = new TestBuilderStub(ArgumentSelectionStrategy.NONE);
 
             assertThatThrownBy(() -> testBuilderStub.setDependency(DependencyX.class, new DependencyX()))
                     .isInstanceOf(UnknownDependencyException.class);
@@ -117,7 +117,7 @@ class TestBedTest {
             super(ClassUnderTest.class);
         }
 
-        TestBuilderStub(SelectionStrategy selectionStrategy) {
+        TestBuilderStub(ArgumentSelectionStrategy selectionStrategy) {
             super(ClassUnderTest.class, selectionStrategy);
         }
 

@@ -1,13 +1,13 @@
-package dev.testbed.constructors.strategies;
+package dev.testbed.constructors.strategies.arguments;
 
-import dev.testbed.constructors.ConstructorSelectionStrategy;
 import dev.testbed.constructors.exceptions.NoClassConstructorsException;
+import dev.testbed.constructors.strategies.ConstructorSelectionStrategy;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class MaxArgumentsSelectionStrategy implements ConstructorSelectionStrategy {
+public class MaxSelectionStrategy implements ConstructorSelectionStrategy {
 
     /**
      * @param classUnderTest to scan for constructors.

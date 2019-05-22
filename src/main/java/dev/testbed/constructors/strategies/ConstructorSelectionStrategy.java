@@ -1,4 +1,4 @@
-package dev.testbed.constructors;
+package dev.testbed.constructors.strategies;
 
 import java.lang.reflect.Constructor;
 
